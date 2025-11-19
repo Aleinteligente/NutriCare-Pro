@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación de Citas - NutriCare Pro</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fnutricare6325back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.10"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface shadow-clinical border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Navigation -->
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-primary rounded-full p-2">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold text-text-primary">NutriCare Pro</h1>
+                    </div>
+                    
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="nutritionist_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="patient_management.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-users mr-2"></i>Pacientes
+                        </a>
+                        <a href="appointment_scheduling.html" class="text-primary font-medium">
+                            <i class="fas fa-calendar-alt mr-2"></i>Citas
+                        </a>
+                        <a href="meal_plan_editor.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-utensils mr-2"></i>Planes
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                        <i class="fas fa-bell text-lg"></i>
+                        <span class="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <div class="flex items-center space-x-3">
+                        <img 
+                            src="https://images.unsplash.com/photo-1675270714610-11a5cadcc7b3" 
+                            alt="Dra. Marisol Morales, nutrióloga profesional"
+                            class="w-8 h-8 rounded-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                        >
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-medium text-text-primary">Dra. Marisol Morales</p>
+                            <p class="text-xs text-text-secondary">Nutrióloga</p>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Calendar Section -->
+            <div class="flex-1">
+                <!-- Calendar Header -->
+                <div class="bg-surface rounded-lg shadow-clinical border border-border-light mb-6">
+                    <div class="p-6 border-b border-border-light">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h2 class="text-2xl font-bold text-text-primary">Programación de Citas</h2>
+                                <p class="text-text-secondary mt-1">Gestiona tu calendario y citas de pacientes</p>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <!-- View Toggle -->
+                                <div class="flex bg-background rounded-lg p-1">
+                                    <button class="px-3 py-1 text-sm font-medium bg-primary text-white rounded-md transition-colors" id="weekView">
+                                        Semana
+                                    </button>
+                                    <button class="px-3 py-1 text-sm font-medium text-text-secondary hover:text-primary transition-colors" id="monthView">
+                                        Mes
+                                    </button>
+                                    <button class="px-3 py-1 text-sm font-medium text-text-secondary hover:text-primary transition-colors" id="dayView">
+                                        Día
+                                    </button>
+                                </div>
+                                
+                                <!-- Date Navigation -->
+                                <div class="flex items-center space-x-2">
+                                    <button class="p-2 text-text-secondary hover:text-primary transition-colors touch-target" id="prevWeek">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="text-lg font-semibold text-text-primary min-w-48 text-center" id="currentWeek">
+                                        12 - 18 Noviembre 2025
+                                    </span>
+                                    <button class="p-2 text-text-secondary hover:text-primary transition-colors touch-target" id="nextWeek">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="btn-primary" id="newAppointmentBtn">
+                                    <i class="fas fa-plus mr-2"></i>Nueva Cita
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="p-4 bg-primary-50 border-b border-border-light">
+                        <div class="flex flex-wrap gap-3">
+                            <button class="flex items-center space-x-2 px-3 py-2 bg-surface rounded-lg border border-border-light hover:shadow-md transition-all text-sm">
+                                <i class="fas fa-clock text-secondary"></i>
+                                <span>Disponibilidad</span>
+                            </button>
+                            <button class="flex items-center space-x-2 px-3 py-2 bg-surface rounded-lg border border-border-light hover:shadow-md transition-all text-sm">
+                                <i class="fas fa-repeat text-primary"></i>
+                                <span>Citas Recurrentes</span>
+                            </button>
+                            <button class="flex items-center space-x-2 px-3 py-2 bg-surface rounded-lg border border-border-light hover:shadow-md transition-all text-sm">
+                                <i class="fas fa-template text-accent"></i>
+                                <span>Plantillas</span>
+                            </button>
+                            <button class="flex items-center space-x-2 px-3 py-2 bg-surface rounded-lg border border-border-light hover:shadow-md transition-all text-sm">
+                                <i class="fas fa-bell text-warning"></i>
+                                <span>Recordatorios</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div class="bg-surface rounded-lg shadow-clinical border border-border-light overflow-hidden">
+                    <!-- Calendar Header Days -->
+                    <div class="grid grid-cols-8 border-b border-border-light">
+                        <div class="p-3 text-center text-sm font-medium text-text-secondary bg-background">
+                            Hora
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-primary border-l border-border-light">
+                            <div>Lun</div>
+                            <div class="text-xs text-text-secondary">12 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-primary border-l border-border-light">
+                            <div>Mar</div>
+                            <div class="text-xs text-text-secondary">13 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-primary border-l border-border-light">
+                            <div>Mié</div>
+                            <div class="text-xs text-text-secondary">14 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-primary border-l border-border-light">
+                            <div>Jue</div>
+                            <div class="text-xs text-text-secondary">15 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-primary border-l border-border-light">
+                            <div>Vie</div>
+                            <div class="text-xs text-text-secondary">16 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-secondary border-l border-border-light">
+                            <div>Sáb</div>
+                            <div class="text-xs text-text-secondary">17 Nov</div>
+                        </div>
+                        <div class="p-3 text-center text-sm font-medium text-text-secondary border-l border-border-light">
+                            <div>Dom</div>
+                            <div class="text-xs text-text-secondary">18 Nov</div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Time Slots -->
+                    <div class="max-h-96 overflow-y-auto" id="calendarGrid">
+                        <!-- 9:00 AM -->
+                        <div class="grid grid-cols-8 border-b border-border-light min-h-16">
+                            <div class="p-3 text-sm text-text-secondary bg-background border-r border-border-light flex items-center">
+                                09:00
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="09:00" data-day="monday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="09:00" data-day="tuesday">
+                                <div class="absolute inset-1 bg-primary-100 border border-primary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-primary-700">Ana Martínez</div>
+                                    <div class="text-primary-600">Consulta inicial</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="09:00" data-day="wednesday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="09:00" data-day="thursday">
+                                <div class="absolute inset-1 bg-secondary-100 border border-secondary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-secondary-700">Carlos López</div>
+                                    <div class="text-secondary-600">Seguimiento</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="09:00" data-day="friday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="09:00" data-day="saturday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="09:00" data-day="sunday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                        </div>
+
+                        <!-- 10:00 AM -->
+                        <div class="grid grid-cols-8 border-b border-border-light min-h-16">
+                            <div class="p-3 text-sm text-text-secondary bg-background border-r border-border-light flex items-center">
+                                10:00
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="10:00" data-day="monday">
+                                <div class="absolute inset-1 bg-warning-100 border border-warning-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-warning-700">María Rodríguez</div>
+                                    <div class="text-warning-600">Pendiente confirmación</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="10:00" data-day="tuesday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="10:00" data-day="wednesday">
+                                <div class="absolute inset-1 bg-primary-100 border border-primary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-primary-700">José García</div>
+                                    <div class="text-primary-600">Revisión plan</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="10:00" data-day="thursday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="10:00" data-day="friday">
+                                <div class="absolute inset-1 bg-secondary-100 border border-secondary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-secondary-700">Laura Fernández</div>
+                                    <div class="text-secondary-600">Control peso</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="10:00" data-day="saturday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="10:00" data-day="sunday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                        </div>
+
+                        <!-- 11:00 AM -->
+                        <div class="grid grid-cols-8 border-b border-border-light min-h-16">
+                            <div class="p-3 text-sm text-text-secondary bg-background border-r border-border-light flex items-center">
+                                11:00
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="11:00" data-day="monday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="11:00" data-day="tuesday">
+                                <div class="absolute inset-1 bg-accent-100 border border-accent-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-accent-700">Pedro Sánchez</div>
+                                    <div class="text-accent-600">Cancelada</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="11:00" data-day="wednesday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="11:00" data-day="thursday">
+                                <div class="absolute inset-1 bg-primary-100 border border-primary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-primary-700">Elena Morales</div>
+                                    <div class="text-primary-600">Primera consulta</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="11:00" data-day="friday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="11:00" data-day="saturday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="11:00" data-day="sunday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                        </div>
+
+                        <!-- 12:00 PM -->
+                        <div class="grid grid-cols-8 border-b border-border-light min-h-16">
+                            <div class="p-3 text-sm text-text-secondary bg-background border-r border-border-light flex items-center">
+                                12:00
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="12:00" data-day="monday">
+                                <div class="absolute inset-1 bg-secondary-100 border border-secondary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-secondary-700">Roberto Díaz</div>
+                                    <div class="text-secondary-600">Evaluación final</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="12:00" data-day="tuesday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="12:00" data-day="wednesday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="12:00" data-day="thursday">
+                                <!-- Available slot -->
+                            </div>
+                            <div class="border-l border-border-light relative hover:bg-primary-50 transition-colors cursor-pointer" data-time="12:00" data-day="friday">
+                                <div class="absolute inset-1 bg-primary-100 border border-primary-300 rounded p-2 text-xs">
+                                    <div class="font-medium text-primary-700">Isabel Torres</div>
+                                    <div class="text-primary-600">Consulta nutricional</div>
+                                </div>
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="12:00" data-day="saturday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                            <div class="border-l border-border-light bg-gray-50 relative" data-time="12:00" data-day="sunday">
+                                <!-- Weekend - disabled -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="mt-4 bg-surface rounded-lg shadow-clinical border border-border-light p-4">
+                    <h3 class="text-sm font-medium text-text-primary mb-3">Leyenda de Estados</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-primary-100 border border-primary-300 rounded"></div>
+                            <span class="text-sm text-text-secondary">Confirmada</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-secondary-100 border border-secondary-300 rounded"></div>
+                            <span class="text-sm text-text-secondary">Completada</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-warning-100 border border-warning-300 rounded"></div>
+                            <span class="text-sm text-text-secondary">Pendiente</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 bg-accent-100 border border-accent-300 rounded"></div>
+                            <span class="text-sm text-text-secondary">Cancelada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Details Panel -->
+            <div class="w-full lg:w-96">
+                <div class="bg-surface rounded-lg shadow-clinical border border-border-light">
+                    <div class="p-6 border-b border-border-light">
+                        <h3 class="text-lg font-semibold text-text-primary">Detalles de Cita</h3>
+                        <p class="text-sm text-text-secondary mt-1">Crear o editar información de la cita</p>
+                    </div>
+
+                    <form class="p-6 space-y-6" id="appointmentForm">
+                        <!-- Patient Selection -->
+                        <div>
+                            <label for="patientSelect" class="block text-sm font-medium text-text-primary mb-2">
+                                Paciente *
+                            </label>
+                            <select id="patientSelect" class="input-field" required>
+                                <option value="">Seleccionar paciente...</option>
+                                <option value="ana-martinez">Ana Martínez</option>
+                                <option value="carlos-lopez">Carlos López</option>
+                                <option value="maria-rodriguez">María Rodríguez</option>
+                                <option value="jose-garcia">José García</option>
+                                <option value="laura-fernandez">Laura Fernández</option>
+                                <option value="pedro-sanchez">Pedro Sánchez</option>
+                                <option value="elena-morales">Elena Morales</option>
+                                <option value="roberto-diaz">Roberto Díaz</option>
+                                <option value="isabel-torres">Isabel Torres</option>
+                            </select>
+                        </div>
+
+                        <!-- Appointment Type -->
+                        <div>
+                            <label for="appointmentType" class="block text-sm font-medium text-text-primary mb-2">
+                                Tipo de Consulta *
+                            </label>
+                            <select id="appointmentType" class="input-field" required>
+                                <option value="">Seleccionar tipo...</option>
+                                <option value="initial">Consulta Inicial</option>
+                                <option value="followup">Seguimiento</option>
+                                <option value="review">Revisión de Plan</option>
+                                <option value="weight-control">Control de Peso</option>
+                                <option value="final-evaluation">Evaluación Final</option>
+                                <option value="nutritional-consultation">Consulta Nutricional</option>
+                            </select>
+                        </div>
+
+                        <!-- Date and Time -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="appointmentDate" class="block text-sm font-medium text-text-primary mb-2">
+                                    Fecha *
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="appointmentDate" 
+                                    class="input-field" 
+                                    value="2025-11-14"
+                                    required
+                                >
+                            </div>
+                            <div>
+                                <label for="appointmentTime" class="block text-sm font-medium text-text-primary mb-2">
+                                    Hora *
+                                </label>
+                                <input 
+                                    type="time" 
+                                    id="appointmentTime" 
+                                    class="input-field" 
+                                    value="10:00"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Duration -->
+                        <div>
+                            <label for="duration" class="block text-sm font-medium text-text-primary mb-2">
+                                Duración (minutos) *
+                            </label>
+                            <select id="duration" class="input-field" required>
+                                <option value="15">15 minutos</option>
+                                <option value="30" selected>30 minutos</option>
+                                <option value="45">45 minutos</option>
+                                <option value="60">60 minutos</option>
+                                <option value="90">90 minutos</option>
+                            </select>
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-text-primary mb-2">
+                                Estado
+                            </label>
+                            <select id="status" class="input-field">
+                                <option value="scheduled" selected>Programada</option>
+                                <option value="confirmed">Confirmada</option>
+                                <option value="completed">Completada</option>
+                                <option value="cancelled">Cancelada</option>
+                            </select>
+                        </div>
+
+                        <!-- Notes -->
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-text-primary mb-2">
+                                Notas
+                            </label>
+                            <textarea 
+                                id="notes" 
+                                rows="3" 
+                                class="input-field resize-none" 
+                                placeholder="Notas adicionales sobre la cita..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Recurring Appointment -->
+                        <div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="recurring" 
+                                    class="h-4 w-4 text-primary focus:ring-primary border-border-medium rounded"
+                                >
+                                <label for="recurring" class="ml-2 block text-sm text-text-primary">
+                                    Cita recurrente
+                                </label>
+                            </div>
+                            <div id="recurringOptions" class="mt-3 space-y-3 hidden">
+                                <select class="input-field text-sm">
+                                    <option value="weekly">Semanal</option>
+                                    <option value="biweekly">Quincenal</option>
+                                    <option value="monthly">Mensual</option>
+                                </select>
+                                <input 
+                                    type="number" 
+                                    class="input-field text-sm" 
+                                    placeholder="Número de repeticiones"
+                                    min="1"
+                                    max="52"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-3 pt-4">
+                            <button type="submit" class="btn-primary flex-1">
+                                <i class="fas fa-save mr-2"></i>
+                                Guardar Cita
+                            </button>
+                            <button type="button" class="btn-secondary" id="clearForm">
+                                <i class="fas fa-times mr-2"></i>
+                                Limpiar
+                            </button>
+                        </div>
+
+                        <!-- Additional Actions -->
+                        <div class="border-t border-border-light pt-4 space-y-2">
+                            <button type="button" class="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-border-medium rounded-lg hover:bg-background transition-colors">
+                                <i class="fas fa-envelope text-primary"></i>
+                                <span class="text-sm">Enviar Recordatorio</span>
+                            </button>
+                            <button type="button" class="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-border-medium rounded-lg hover:bg-background transition-colors">
+                                <i class="fas fa-phone text-secondary"></i>
+                                <span class="text-sm">Llamar Paciente</span>
+                            </button>
+                            <button type="button" class="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-border-medium rounded-lg hover:bg-background transition-colors">
+                                <i class="fas fa-user text-accent"></i>
+                                <span class="text-sm">Ver Perfil Paciente</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Today's Appointments Summary -->
+                <div class="mt-6 bg-surface rounded-lg shadow-clinical border border-border-light">
+                    <div class="p-4 border-b border-border-light">
+                        <h3 class="text-lg font-semibold text-text-primary">Citas de Hoy</h3>
+                        <p class="text-sm text-text-secondary">Martes, 12 de Noviembre 2025</p>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-text-primary">Ana Martínez</p>
+                                <p class="text-sm text-text-secondary">09:00 - Consulta inicial</p>
+                            </div>
+                            <span class="status-success">Confirmada</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-secondary-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-text-primary">José García</p>
+                                <p class="text-sm text-text-secondary">10:00 - Revisión plan</p>
+                            </div>
+                            <span class="status-success">Confirmada</span>
+                        </div>
+                        <div class="text-center py-2">
+                            <a href="nutritionist_dashboard.html" class="text-primary hover:text-primary-700 text-sm font-medium">
+                                Ver todas las citas →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Appointment Modal -->
+    <div id="appointmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-surface rounded-lg shadow-clinical max-w-md w-full mx-4">
+            <div class="p-6 border-b border-border-light">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-text-primary">Nueva Cita</h3>
+                    <button class="text-text-secondary hover:text-text-primary" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-text-secondary mb-4">Selecciona una hora disponible en el calendario o completa el formulario para crear una nueva cita.</p>
+                <div class="flex space-x-3">
+                    <button class="btn-primary flex-1" id="quickSchedule">
+                        <i class="fas fa-clock mr-2"></i>
+                        Programación Rápida
+                    </button>
+                    <button class="btn-secondary flex-1" id="closeModalBtn">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conflict Detection Modal -->
+    <div id="conflictModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-surface rounded-lg shadow-clinical max-w-md w-full mx-4">
+            <div class="p-6 border-b border-border-light">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-warning-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-warning-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-text-primary">Conflicto de Horario</h3>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-text-secondary mb-4">Ya existe una cita programada en este horario. ¿Deseas:</p>
+                <div class="space-y-3">
+                    <button class="w-full btn-primary">
+                        <i class="fas fa-edit mr-2"></i>
+                        Reprogramar Cita Existente
+                    </button>
+                    <button class="w-full btn-secondary">
+                        <i class="fas fa-clock mr-2"></i>
+                        Sugerir Horario Alternativo
+                    </button>
+                    <button class="w-full border border-border-medium rounded-lg px-4 py-2 hover:bg-background transition-colors" id="closeConflictModal">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calendar functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calendar navigation
+            const prevWeekBtn = document.getElementById('prevWeek');
+            const nextWeekBtn = document.getElementById('nextWeek');
+            const currentWeekSpan = document.getElementById('currentWeek');
+            
+            // View toggles
+            const weekViewBtn = document.getElementById('weekView');
+            const monthViewBtn = document.getElementById('monthView');
+            const dayViewBtn = document.getElementById('dayView');
+            
+            // Modal controls
+            const newAppointmentBtn = document.getElementById('newAppointmentBtn');
+            const appointmentModal = document.getElementById('appointmentModal');
+            const closeModal = document.getElementById('closeModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const conflictModal = document.getElementById('conflictModal');
+            const closeConflictModal = document.getElementById('closeConflictModal');
+            
+            // Form controls
+            const appointmentForm = document.getElementById('appointmentForm');
+            const clearFormBtn = document.getElementById('clearForm');
+            const recurringCheckbox = document.getElementById('recurring');
+            const recurringOptions = document.getElementById('recurringOptions');
+            
+            // Calendar slot interactions
+            const calendarSlots = document.querySelectorAll('[data-time][data-day]');
+            
+            // Week navigation
+            let currentWeekStart = new Date(2025, 10, 12); // November 12, 2025
+            
+            function updateWeekDisplay() {
+                const weekEnd = new Date(currentWeekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+                
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const startStr = currentWeekStart.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+                const endStr = weekEnd.toLocaleDateString('es-ES', options);
+                
+                currentWeekSpan.textContent = `${startStr} - ${endStr}`;
+            }
+            
+            prevWeekBtn.addEventListener('click', function() {
+                currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+                updateWeekDisplay();
+            });
+            
+            nextWeekBtn.addEventListener('click', function() {
+                currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+                updateWeekDisplay();
+            });
+            
+            // View toggle functionality
+            function setActiveView(activeBtn) {
+                [weekViewBtn, monthViewBtn, dayViewBtn].forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('text-text-secondary');
+                });
+                activeBtn.classList.add('bg-primary', 'text-white');
+                activeBtn.classList.remove('text-text-secondary');
+            }
+            
+            weekViewBtn.addEventListener('click', () => setActiveView(weekViewBtn));
+            monthViewBtn.addEventListener('click', () => setActiveView(monthViewBtn));
+            dayViewBtn.addEventListener('click', () => setActiveView(dayViewBtn));
+            
+            // Modal controls
+            newAppointmentBtn.addEventListener('click', function() {
+                appointmentModal.classList.remove('hidden');
+            });
+            
+            closeModal.addEventListener('click', function() {
+                appointmentModal.classList.add('hidden');
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                appointmentModal.classList.add('hidden');
+            });
+            
+            closeConflictModal.addEventListener('click', function() {
+                conflictModal.classList.add('hidden');
+            });
+            
+            // Calendar slot interactions
+            calendarSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    const time = this.dataset.time;
+                    const day = this.dataset.day;
+                    
+                    // Check if slot has existing appointment
+                    if (this.querySelector('div')) {
+                        // Show conflict modal
+                        conflictModal.classList.remove('hidden');
+                    } else {
+                        // Fill form with selected time
+                        const timeInput = document.getElementById('appointmentTime');
+                        timeInput.value = time;
+                        
+                        // Auto-fill date based on day
+                        const dateInput = document.getElementById('appointmentDate');
+                        const dayIndex = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].indexOf(day);
+                        const selectedDate = new Date(currentWeekStart);
+                        selectedDate.setDate(selectedDate.getDate() + dayIndex);
+                        dateInput.value = selectedDate.toISOString().split('T')[0];
+                        
+                        appointmentModal.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Recurring appointment toggle
+            recurringCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    recurringOptions.classList.remove('hidden');
+                } else {
+                    recurringOptions.classList.add('hidden');
+                }
+            });
+            
+            // Form submission
+            appointmentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const appointmentData = Object.fromEntries(formData);
+                
+                // Validate minimum duration
+                const duration = parseInt(appointmentData.duration || document.getElementById('duration').value);
+                if (duration < 15) {
+                    alert('La duración mínima de una cita es de 15 minutos.');
+                    return;
+                }
+                
+                // Simulate saving appointment
+                const loadingBtn = this.querySelector('button[type="submit"]');
+                const originalText = loadingBtn.innerHTML;
+                loadingBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Guardando...';
+                loadingBtn.disabled = true;
+                
+                setTimeout(() => {
+                    loadingBtn.innerHTML = originalText;
+                    loadingBtn.disabled = false;
+                    alert('Cita guardada exitosamente');
+                    
+                    // Clear form
+                    this.reset();
+                    recurringOptions.classList.add('hidden');
+                }, 1500);
+            });
+            
+            // Clear form
+            clearFormBtn.addEventListener('click', function() {
+                appointmentForm.reset();
+                recurringOptions.classList.add('hidden');
+            });
+            
+            // Quick schedule functionality
+            document.getElementById('quickSchedule').addEventListener('click', function() {
+                appointmentModal.classList.add('hidden');
+                // Auto-fill with next available slot
+                const patientSelect = document.getElementById('patientSelect');
+                const typeSelect = document.getElementById('appointmentType');
+                
+                // Set default values for quick scheduling
+                patientSelect.value = 'ana-martinez';
+                typeSelect.value = 'followup';
+                
+                alert('Formulario completado con valores por defecto. Ajusta según sea necesario.');
+            });
+            
+            // Initialize week display
+            updateWeekDisplay();
+            
+            // Simulate real-time updates
+            setInterval(function() {
+                // Update appointment statuses or add new appointments
+                // This would typically come from a WebSocket or polling mechanism
+            }, 30000);
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

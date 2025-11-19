@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Planes Nutricionales - NutriCare Pro</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fnutricare6325back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface shadow-clinical border-b border-border-light sticky top-0 z-40">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Navigation -->
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-primary rounded-lg p-2">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-text-primary">NutriCare Pro</h1>
+                            <p class="text-xs text-text-secondary">Editor de Planes</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="nutritionist_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="patient_management.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-users mr-2"></i>Pacientes
+                        </a>
+                        <a href="appointment_scheduling.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-calendar mr-2"></i>Citas
+                        </a>
+                        <a href="meal_plan_editor.html" class="text-primary font-medium">
+                            <i class="fas fa-utensils mr-2"></i>Planes Nutricionales
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <button class="btn-primary">
+                        <i class="fas fa-save mr-2"></i>Guardar Plan
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <img 
+                            src="https://images.unsplash.com/photo-1659354206036-3d2699c31e0c" 
+                            alt="Foto de perfil de la nutricionista Dra. Marisol Morales"
+                            class="w-8 h-8 rounded-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                        >
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-medium text-text-primary">Dra. Marisol Morales</p>
+                            <p class="text-xs text-text-secondary">Nutrióloga</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex h-screen pt-16">
+        <!-- Food Library Sidebar -->
+        <div class="w-80 bg-surface border-r border-border-light overflow-y-auto">
+            <div class="p-4">
+                <!-- Search and Filters -->
+                <div class="mb-6">
+                    <div class="relative mb-4">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-text-secondary"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            placeholder="Buscar alimentos..."
+                            class="input-field pl-10"
+                            id="foodSearch"
+                        >
+                    </div>
+                    
+                    <!-- Category Filters -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button class="px-3 py-1 text-xs bg-primary text-white rounded-full category-filter active" data-category="all">
+                            Todos
+                        </button>
+                        <button class="px-3 py-1 text-xs bg-border-light text-text-secondary rounded-full category-filter hover:bg-primary hover:text-white transition-colors" data-category="proteins">
+                            Proteínas
+                        </button>
+                        <button class="px-3 py-1 text-xs bg-border-light text-text-secondary rounded-full category-filter hover:bg-primary hover:text-white transition-colors" data-category="carbs">
+                            Carbohidratos
+                        </button>
+                        <button class="px-3 py-1 text-xs bg-border-light text-text-secondary rounded-full category-filter hover:bg-primary hover:text-white transition-colors" data-category="vegetables">
+                            Verduras
+                        </button>
+                        <button class="px-3 py-1 text-xs bg-border-light text-text-secondary rounded-full category-filter hover:bg-primary hover:text-white transition-colors" data-category="fruits">
+                            Frutas
+                        </button>
+                        <button class="px-3 py-1 text-xs bg-border-light text-text-secondary rounded-full category-filter hover:bg-primary hover:text-white transition-colors" data-category="dairy">
+                            Lácteos
+                        </button>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="flex space-x-2">
+                        <button class="flex-1 btn-secondary text-xs py-2">
+                            <i class="fas fa-plus mr-1"></i>Nuevo Alimento
+                        </button>
+                        <button class="px-3 py-2 border border-border-medium rounded-lg text-text-secondary hover:bg-background transition-colors">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Food Items -->
+                <div id="foodLibrary" class="space-y-3">
+                    <!-- Proteins -->
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="proteins"
+                         data-food='{"name":"Pechuga de Pollo","calories":165,"protein":31,"carbs":0,"fat":3.6,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1698190248534-e9842a164299" 
+                                alt="Pechuga de pollo cocida, fuente de proteína magra"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Pechuga de Pollo</h4>
+                                <p class="text-xs text-text-secondary">165 kcal • 31g proteína</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="proteins"
+                         data-food='{"name":"Salmón","calories":208,"protein":25,"carbs":0,"fat":12,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6" 
+                                alt="Filete de salmón fresco, rico en omega-3 y proteínas"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Salmón</h4>
+                                <p class="text-xs text-text-secondary">208 kcal • 25g proteína</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carbohydrates -->
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="carbs"
+                         data-food='{"name":"Arroz Integral","calories":111,"protein":2.6,"carbs":23,"fat":0.9,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1524959888681-150ae9e79a7b" 
+                                alt="Arroz integral cocido, carbohidrato complejo y saludable"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Arroz Integral</h4>
+                                <p class="text-xs text-text-secondary">111 kcal • 23g carbohidratos</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="carbs"
+                         data-food='{"name":"Quinoa","calories":120,"protein":4.4,"carbs":22,"fat":1.9,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1677907224572-757d5a15c022" 
+                                alt="Quinoa cocida en bowl, superalimento rico en proteínas"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Quinoa</h4>
+                                <p class="text-xs text-text-secondary">120 kcal • 22g carbohidratos</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vegetables -->
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="vegetables"
+                         data-food='{"name":"Brócoli","calories":34,"protein":2.8,"carbs":7,"fat":0.4,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1676454954482-3a7d43f780e3" 
+                                alt="Brócoli fresco, verdura rica en vitaminas y minerales"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Brócoli</h4>
+                                <p class="text-xs text-text-secondary">34 kcal • 7g carbohidratos</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fruits -->
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="fruits"
+                         data-food='{"name":"Manzana","calories":52,"protein":0.3,"carbs":14,"fat":0.2,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1715420329052-79c9f0c801e6" 
+                                alt="Manzanas rojas frescas, fruta rica en fibra y vitaminas"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Manzana</h4>
+                                <p class="text-xs text-text-secondary">52 kcal • 14g carbohidratos</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dairy -->
+                    <div class="food-item bg-background p-3 rounded-lg border border-border-light cursor-grab hover:shadow-clinical transition-shadow" 
+                         draggable="true" 
+                         data-category="dairy"
+                         data-food='{"name":"Yogur Griego","calories":59,"protein":10,"carbs":3.6,"fat":0.4,"portion":"100g"}'>
+                        <div class="flex items-center space-x-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1588048683739-e2074520646d" 
+                                alt="Yogur griego natural en bowl, lácteo rico en proteínas"
+                                class="w-12 h-12 rounded-lg object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary text-sm">Yogur Griego</h4>
+                                <p class="text-xs text-text-secondary">59 kcal • 10g proteína</p>
+                                <p class="text-xs text-text-secondary">Porción: 100g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Planning Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Plan Header -->
+            <div class="bg-surface border-b border-border-light p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-text-primary">Plan Nutricional Semanal</h2>
+                        <p class="text-sm text-text-secondary">Arrastra alimentos desde la biblioteca para crear el plan</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <select class="input-field w-48">
+                            <option>Seleccionar Plantilla</option>
+                            <option>Plan Pérdida de Peso</option>
+                            <option>Plan Ganancia Muscular</option>
+                            <option>Plan Mantenimiento</option>
+                            <option>Plan Vegetariano</option>
+                        </select>
+                        <button class="btn-secondary">
+                            <i class="fas fa-save mr-2"></i>Guardar como Plantilla
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Meal Grid -->
+            <div class="flex-1 overflow-auto p-4">
+                <div class="min-w-full">
+                    <!-- Days Header -->
+                    <div class="grid grid-cols-8 gap-4 mb-4">
+                        <div class="font-medium text-text-primary text-center">Comidas</div>
+                        <div class="font-medium text-text-primary text-center">Lunes</div>
+                        <div class="font-medium text-text-primary text-center">Martes</div>
+                        <div class="font-medium text-text-primary text-center">Miércoles</div>
+                        <div class="font-medium text-text-primary text-center">Jueves</div>
+                        <div class="font-medium text-text-primary text-center">Viernes</div>
+                        <div class="font-medium text-text-primary text-center">Sábado</div>
+                        <div class="font-medium text-text-primary text-center">Domingo</div>
+                    </div>
+
+                    <!-- Meal Rows -->
+                    <div class="space-y-4">
+                        <!-- Breakfast -->
+                        <div class="grid grid-cols-8 gap-4">
+                            <div class="flex items-center justify-center bg-primary-50 rounded-lg p-3">
+                                <div class="text-center">
+                                    <i class="fas fa-sun text-primary text-lg mb-1"></i>
+                                    <p class="text-sm font-medium text-primary">Desayuno</p>
+                                    <p class="text-xs text-text-secondary">07:00 - 09:00</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="monday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="tuesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="wednesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="thursday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="friday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="saturday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="breakfast" data-day="sunday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lunch -->
+                        <div class="grid grid-cols-8 gap-4">
+                            <div class="flex items-center justify-center bg-secondary-50 rounded-lg p-3">
+                                <div class="text-center">
+                                    <i class="fas fa-utensils text-secondary text-lg mb-1"></i>
+                                    <p class="text-sm font-medium text-secondary">Almuerzo</p>
+                                    <p class="text-xs text-text-secondary">12:00 - 14:00</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="monday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="tuesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="wednesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="thursday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="friday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="saturday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="lunch" data-day="sunday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dinner -->
+                        <div class="grid grid-cols-8 gap-4">
+                            <div class="flex items-center justify-center bg-accent-50 rounded-lg p-3">
+                                <div class="text-center">
+                                    <i class="fas fa-moon text-accent text-lg mb-1"></i>
+                                    <p class="text-sm font-medium text-accent">Cena</p>
+                                    <p class="text-xs text-text-secondary">19:00 - 21:00</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="monday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="tuesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="wednesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="thursday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="friday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="saturday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="dinner" data-day="sunday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Snacks -->
+                        <div class="grid grid-cols-8 gap-4">
+                            <div class="flex items-center justify-center bg-warning-50 rounded-lg p-3">
+                                <div class="text-center">
+                                    <i class="fas fa-cookie-bite text-warning text-lg mb-1"></i>
+                                    <p class="text-sm font-medium text-warning">Meriendas</p>
+                                    <p class="text-xs text-text-secondary">10:00 / 16:00</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="monday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="tuesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="wednesday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="thursday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="friday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="saturday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                            <div class="meal-slot bg-surface border-2 border-dashed border-border-light rounded-lg p-4 min-h-24 transition-colors hover:border-primary" 
+                                 data-meal="snacks" data-day="sunday">
+                                <div class="text-center text-text-secondary text-sm">
+                                    <i class="fas fa-plus mb-2"></i>
+                                    <p>Arrastra alimentos aquí</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Nutritional Summary & Patient Assignment -->
+        <div class="w-80 bg-surface border-l border-border-light overflow-y-auto">
+            <div class="p-4">
+                <!-- Nutritional Summary -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-text-primary mb-4">Resumen Nutricional Diario</h3>
+                    
+                    <!-- Daily Totals -->
+                    <div class="bg-background p-4 rounded-lg mb-4">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-text-secondary">Calorías Totales</span>
+                                <span class="font-bold text-lg text-text-primary" id="totalCalories">0</span>
+                            </div>
+                            
+                            <!-- Macronutrients -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-text-secondary">Proteínas</span>
+                                    <span class="text-sm font-medium text-secondary" id="totalProtein">0g</span>
+                                </div>
+                                <div class="w-full bg-border-light rounded-full h-2">
+                                    <div class="bg-secondary h-2 rounded-full" style="width: 0%" id="proteinBar"></div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-text-secondary">Carbohidratos</span>
+                                    <span class="text-sm font-medium text-primary" id="totalCarbs">0g</span>
+                                </div>
+                                <div class="w-full bg-border-light rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 0%" id="carbsBar"></div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-text-secondary">Grasas</span>
+                                    <span class="text-sm font-medium text-accent" id="totalFat">0g</span>
+                                </div>
+                                <div class="w-full bg-border-light rounded-full h-2">
+                                    <div class="bg-accent h-2 rounded-full" style="width: 0%" id="fatBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Target Goals -->
+                    <div class="bg-primary-50 p-4 rounded-lg">
+                        <h4 class="font-medium text-primary mb-2">Objetivos Nutricionales</h4>
+                        <div class="text-xs text-primary-700 space-y-1">
+                            <p>Calorías: 1.800 - 2.000 kcal</p>
+                            <p>Proteínas: 120 - 140g (25-30%)</p>
+                            <p>Carbohidratos: 180 - 225g (40-45%)</p>
+                            <p>Grasas: 60 - 78g (30-35%)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Assignment -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-text-primary mb-4">Asignar a Pacientes</h3>
+                    
+                    <!-- Patient Search -->
+                    <div class="relative mb-4">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-text-secondary"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            placeholder="Buscar pacientes..."
+                            class="input-field pl-10 text-sm"
+                        >
+                    </div>
+
+                    <!-- Patient List -->
+                    <div class="space-y-2 max-h-64 overflow-y-auto">
+                        <div class="flex items-center space-x-3 p-3 bg-background rounded-lg hover:bg-primary-50 transition-colors cursor-pointer">
+                            <input type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-border-medium rounded">
+                            <img 
+                                src="https://img.rocket.new/generatedImages/rocket_gen_img_1beb9fc75-1762273370028.png" 
+                                alt="Foto de perfil de Ana Martínez, paciente"
+                                class="w-8 h-8 rounded-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-text-primary">Ana Martínez</p>
+                                <p class="text-xs text-text-secondary">Pérdida de peso</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 p-3 bg-background rounded-lg hover:bg-primary-50 transition-colors cursor-pointer">
+                            <input type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-border-medium rounded">
+                            <img 
+                                src="https://img.rocket.new/generatedImages/rocket_gen_img_120b829b0-1762274578306.png" 
+                                alt="Foto de perfil de Carlos Ruiz, paciente"
+                                class="w-8 h-8 rounded-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-text-primary">Carlos Ruiz</p>
+                                <p class="text-xs text-text-secondary">Ganancia muscular</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 p-3 bg-background rounded-lg hover:bg-primary-50 transition-colors cursor-pointer">
+                            <input type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-border-medium rounded">
+                            <img 
+                                src="https://img.rocket.new/generatedImages/rocket_gen_img_1037a390f-1762273998500.png" 
+                                alt="Foto de perfil de Laura García, paciente"
+                                class="w-8 h-8 rounded-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-text-primary">Laura García</p>
+                                <p class="text-xs text-text-secondary">Mantenimiento</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 p-3 bg-background rounded-lg hover:bg-primary-50 transition-colors cursor-pointer">
+                            <input type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-border-medium rounded">
+                            <img 
+                                src="https://img.rocket.new/generatedImages/rocket_gen_img_120b829b0-1762274578306.png" 
+                                alt="Foto de perfil de Miguel López, paciente"
+                                class="w-8 h-8 rounded-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-text-primary">Miguel López</p>
+                                <p class="text-xs text-text-secondary">Dieta vegetariana</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assignment Actions -->
+                    <div class="mt-4 space-y-2">
+                        <button class="btn-primary w-full">
+                            <i class="fas fa-paper-plane mr-2"></i>Asignar Plan
+                        </button>
+                        <button class="w-full px-4 py-2 border border-border-medium rounded-lg text-text-secondary hover:bg-background transition-colors">
+                            <i class="fas fa-calendar mr-2"></i>Programar Entrega
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div>
+                    <h3 class="text-lg font-bold text-text-primary mb-4">Acciones Rápidas</h3>
+                    <div class="space-y-2">
+                        <button class="w-full px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-700 transition-colors">
+                            <i class="fas fa-copy mr-2"></i>Duplicar Semana
+                        </button>
+                        <button class="w-full px-4 py-2 bg-warning text-white rounded-lg hover:bg-warning-600 transition-colors">
+                            <i class="fas fa-undo mr-2"></i>Deshacer Cambios
+                        </button>
+                        <button class="w-full px-4 py-2 border border-border-medium rounded-lg text-text-secondary hover:bg-background transition-colors">
+                            <i class="fas fa-trash mr-2"></i>Limpiar Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation (Hidden on Desktop) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border-light z-30">
+        <div class="grid grid-cols-4 gap-1 p-2">
+            <a href="nutritionist_dashboard.html" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-tachometer-alt text-lg mb-1"></i>
+                <span class="text-xs">Dashboard</span>
+            </a>
+            <a href="patient_management.html" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-users text-lg mb-1"></i>
+                <span class="text-xs">Pacientes</span>
+            </a>
+            <a href="appointment_scheduling.html" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-calendar text-lg mb-1"></i>
+                <span class="text-xs">Citas</span>
+            </a>
+            <a href="meal_plan_editor.html" class="flex flex-col items-center py-2 text-primary">
+                <i class="fas fa-utensils text-lg mb-1"></i>
+                <span class="text-xs">Planes</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Drag and Drop Functionality
+        let draggedFood = null;
+        let mealPlan = {};
+
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDragAndDrop();
+            initializeCategoryFilters();
+            initializeFoodSearch();
+        });
+
+        function initializeDragAndDrop() {
+            // Food items drag start
+            document.querySelectorAll('.food-item').forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    draggedFood = JSON.parse(this.dataset.food);
+                    this.style.opacity = '0.5';
+                });
+
+                item.addEventListener('dragend', function(e) {
+                    this.style.opacity = '1';
+                    draggedFood = null;
+                });
+            });
+
+            // Meal slots drop handling
+            document.querySelectorAll('.meal-slot').forEach(slot => {
+                slot.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('border-primary', 'bg-primary-50');
+                });
+
+                slot.addEventListener('dragleave', function(e) {
+                    this.classList.remove('border-primary', 'bg-primary-50');
+                });
+
+                slot.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('border-primary', 'bg-primary-50');
+                    
+                    if (draggedFood) {
+                        addFoodToMealSlot(this, draggedFood);
+                        updateNutritionalSummary();
+                    }
+                });
+            });
+        }
+
+        function addFoodToMealSlot(slot, food) {
+            const meal = slot.dataset.meal;
+            const day = slot.dataset.day;
+            
+            // Initialize meal plan structure
+            if (!mealPlan[day]) mealPlan[day] = {};
+            if (!mealPlan[day][meal]) mealPlan[day][meal] = [];
+            
+            // Add food to meal plan
+            mealPlan[day][meal].push(food);
+            
+            // Update slot display
+            updateMealSlotDisplay(slot, mealPlan[day][meal]);
+        }
+
+        function updateMealSlotDisplay(slot, foods) {
+            if (foods.length === 0) {
+                slot.innerHTML = `
+                    <div class="text-center text-text-secondary text-sm">
+                        <i class="fas fa-plus mb-2"></i>
+                        <p>Arrastra alimentos aquí</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const foodsHtml = foods.map((food, index) => `
+                <div class="bg-white p-2 rounded border border-border-light mb-2 last:mb-0 relative group">
+                    <button class="absolute top-1 right-1 text-error hover:bg-error-50 rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity" 
+                            onclick="removeFoodFromSlot(this, ${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <p class="text-xs font-medium text-text-primary pr-6">${food.name}</p>
+                    <p class="text-xs text-text-secondary">${food.calories} kcal • ${food.portion}</p>
+                </div>
+            `).join('');
+
+            slot.innerHTML = foodsHtml;
+        }
+
+        function removeFoodFromSlot(button, index) {
+            const slot = button.closest('.meal-slot');
+            const meal = slot.dataset.meal;
+            const day = slot.dataset.day;
+            
+            if (mealPlan[day] && mealPlan[day][meal]) {
+                mealPlan[day][meal].splice(index, 1);
+                updateMealSlotDisplay(slot, mealPlan[day][meal]);
+                updateNutritionalSummary();
+            }
+        }
+
+        function updateNutritionalSummary() {
+            let totalCalories = 0;
+            let totalProtein = 0;
+            let totalCarbs = 0;
+            let totalFat = 0;
+
+            // Calculate totals from current day (Monday for demo)
+            const currentDay = 'monday';
+            if (mealPlan[currentDay]) {
+                Object.values(mealPlan[currentDay]).forEach(meal => {
+                    meal.forEach(food => {
+                        totalCalories += food.calories;
+                        totalProtein += food.protein;
+                        totalCarbs += food.carbs;
+                        totalFat += food.fat;
+                    });
+                });
+            }
+
+            // Update display
+            document.getElementById('totalCalories').textContent = Math.round(totalCalories);
+            document.getElementById('totalProtein').textContent = Math.round(totalProtein) + 'g';
+            document.getElementById('totalCarbs').textContent = Math.round(totalCarbs) + 'g';
+            document.getElementById('totalFat').textContent = Math.round(totalFat) + 'g';
+
+            // Update progress bars (based on 2000 kcal diet)
+            const proteinPercentage = Math.min((totalProtein / 140) * 100, 100);
+            const carbsPercentage = Math.min((totalCarbs / 225) * 100, 100);
+            const fatPercentage = Math.min((totalFat / 78) * 100, 100);
+
+            document.getElementById('proteinBar').style.width = proteinPercentage + '%';
+            document.getElementById('carbsBar').style.width = carbsPercentage + '%';
+            document.getElementById('fatBar').style.width = fatPercentage + '%';
+        }
+
+        function initializeCategoryFilters() {
+            document.querySelectorAll('.category-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Update active filter
+                    document.querySelectorAll('.category-filter').forEach(f => {
+                        f.classList.remove('bg-primary', 'text-white', 'active');
+                        f.classList.add('bg-border-light', 'text-text-secondary');
+                    });
+                    
+                    this.classList.remove('bg-border-light', 'text-text-secondary');
+                    this.classList.add('bg-primary', 'text-white', 'active');
+                    
+                    // Filter food items
+                    const category = this.dataset.category;
+                    filterFoodItems(category);
+                });
+            });
+        }
+
+        function filterFoodItems(category) {
+            document.querySelectorAll('.food-item').forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function initializeFoodSearch() {
+            document.getElementById('foodSearch').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                document.querySelectorAll('.food-item').forEach(item => {
+                    const foodData = JSON.parse(item.dataset.food);
+                    const foodName = foodData.name.toLowerCase();
+                    
+                    if (foodName.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Template management
+        function saveAsTemplate() {
+            const templateName = prompt('Nombre de la plantilla:');
+            if (templateName) {
+                // Save template logic here
+                alert(`Plantilla "${templateName}" guardada exitosamente`);
+            }
+        }
+
+        // Patient assignment
+        function assignPlanToPatients() {
+            const selectedPatients = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (selectedPatients.length === 0) {
+                alert('Por favor, selecciona al menos un paciente');
+                return;
+            }
+            
+            alert(`Plan asignado a ${selectedPatients.length} paciente(s)`);
+        }
+
+        // Quick actions
+        function duplicateWeek() {
+            // Duplicate current week logic
+            alert('Semana duplicada exitosamente');
+        }
+
+        function undoChanges() {
+            // Undo logic
+            mealPlan = {};
+            document.querySelectorAll('.meal-slot').forEach(slot => {
+                updateMealSlotDisplay(slot, []);
+            });
+            updateNutritionalSummary();
+            alert('Cambios deshecho');
+        }
+
+        function clearPlan() {
+            if (confirm('¿Estás seguro de que quieres limpiar todo el plan?')) {
+                mealPlan = {};
+                document.querySelectorAll('.meal-slot').forEach(slot => {
+                    updateMealSlotDisplay(slot, []);
+                });
+                updateNutritionalSummary();
+            }
+        }
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

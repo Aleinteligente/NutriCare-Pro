@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del Paciente - NutriCare Pro</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fnutricare6325back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface shadow-clinical border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Navigation -->
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center">
+                        <div class="bg-primary rounded-full p-2">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-text-primary">NutriCare Pro</span>
+                    </div>
+                    
+                    <!-- Navigation Menu -->
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="patient_portal.html" class="text-primary font-medium border-b-2 border-primary pb-1">
+                            <i class="fas fa-home mr-2"></i>Mi Portal
+                        </a>
+                        <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-chart-line mr-2"></i>Progreso
+                        </a>
+                        <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-utensils mr-2"></i>Plan Nutricional
+                        </a>
+                        <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-comments mr-2"></i>Comunicación
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-3">
+                        <img 
+                            src="https://img.rocket.new/generatedImages/rocket_gen_img_1711e0d8f-1762273338115.png" 
+                            alt="Foto de perfil de María López, paciente sonriendo"
+                            class="w-8 h-8 rounded-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                        >
+                        <div class="hidden md:block">
+                            <p class="text-sm font-medium text-text-primary">María López</p>
+                            <p class="text-xs text-text-secondary">Paciente</p>
+                        </div>
+                        <button class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+
+                    <!-- Logout -->
+                    <a href="login.html" class="text-text-secondary hover:text-accent transition-colors touch-target">
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-lg p-6 border border-primary-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-text-primary mb-2">¡Bienvenida, María!</h1>
+                        <p class="text-text-secondary">Aquí tienes un resumen de tu progreso nutricional y próximas citas.</p>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="bg-primary rounded-full p-4">
+                            <i class="fas fa-heart text-white text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-primary">-3,2kg</div>
+                        <div class="text-xs text-text-secondary">Pérdida de peso</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary">24,1</div>
+                        <div class="text-xs text-text-secondary">IMC actual</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-accent">85%</div>
+                        <div class="text-xs text-text-secondary">Adherencia</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-warning">2</div>
+                        <div class="text-xs text-text-secondary">Días hasta cita</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Progress Charts Section -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Weight Progress Chart -->
+                <div class="card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-text-primary">
+                            <i class="fas fa-chart-line text-primary mr-2"></i>
+                            Evolución del Peso
+                        </h2>
+                        <div class="flex space-x-2">
+                            <button class="btn-primary text-sm px-3 py-1">1M</button>
+                            <button class="text-text-secondary text-sm px-3 py-1 hover:text-primary">3M</button>
+                            <button class="text-text-secondary text-sm px-3 py-1 hover:text-primary">6M</button>
+                        </div>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between text-sm">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-primary rounded-full mr-2"></div>
+                                <span class="text-text-secondary">Peso actual: 67,8 kg</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-secondary rounded-full mr-2"></div>
+                                <span class="text-text-secondary">Objetivo: 65,0 kg</span>
+                            </div>
+                        </div>
+                        <span class="text-success font-medium">↓ 3,2 kg este mes</span>
+                    </div>
+                </div>
+
+                <!-- BMI Progress -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">
+                        <i class="fas fa-calculator text-secondary mr-2"></i>
+                        Índice de Masa Corporal (IMC)
+                    </h3>
+                    <div class="h-48">
+                        <canvas id="bmiChart"></canvas>
+                    </div>
+                    <div class="mt-4 grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-lg font-bold text-text-primary">24,1</div>
+                            <div class="text-xs text-text-secondary">IMC Actual</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-secondary">23,1</div>
+                            <div class="text-xs text-text-secondary">IMC Objetivo</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-success">Normal</div>
+                            <div class="text-xs text-text-secondary">Categoría</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meal Plan Section -->
+                <div class="card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-text-primary">
+                            <i class="fas fa-utensils text-accent mr-2"></i>
+                            Plan Nutricional Semanal
+                        </h2>
+                        <span class="text-sm text-text-secondary">Semana del 11-17 Nov 2025</span>
+                    </div>
+                    
+                    <!-- Daily Meal Plans -->
+                    <div class="space-y-4">
+                        <!-- Today's Meals -->
+                        <div class="bg-primary-50 rounded-lg p-4 border border-primary-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-medium text-text-primary">Hoy - Martes 12 Nov</h4>
+                                <div class="flex items-center space-x-2">
+                                    <span class="status-success">85% completado</span>
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                <!-- Breakfast -->
+                                <div class="bg-surface rounded-lg p-3 border border-border-light">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="text-sm font-medium text-text-primary">Desayuno</h5>
+                                        <input type="checkbox" checked class="text-primary focus:ring-primary rounded">
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1661336072587-d4689910c930" 
+                                            alt="Tazón de avena con frutas frescas y nueces para desayuno saludable"
+                                            class="w-8 h-8 rounded object-cover"
+                                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                        >
+                                        <div>
+                                            <p class="text-xs font-medium">Avena con frutas</p>
+                                            <p class="text-xs text-text-secondary">320 kcal</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lunch -->
+                                <div class="bg-surface rounded-lg p-3 border border-border-light">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="text-sm font-medium text-text-primary">Almuerzo</h5>
+                                        <input type="checkbox" checked class="text-primary focus:ring-primary rounded">
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1647274489685-81100b4cc5a6" 
+                                            alt="Ensalada mediterránea con pollo a la plancha, verduras frescas y aceite de oliva"
+                                            class="w-8 h-8 rounded object-cover"
+                                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                        >
+                                        <div>
+                                            <p class="text-xs font-medium">Ensalada mediterránea</p>
+                                            <p class="text-xs text-text-secondary">450 kcal</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Snack -->
+                                <div class="bg-surface rounded-lg p-3 border border-border-light">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="text-sm font-medium text-text-primary">Merienda</h5>
+                                        <input type="checkbox" class="text-primary focus:ring-primary rounded">
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1727796012228-3a4a81019da7" 
+                                            alt="Yogur griego natural con almendras y miel como merienda saludable"
+                                            class="w-8 h-8 rounded object-cover"
+                                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                        >
+                                        <div>
+                                            <p class="text-xs font-medium">Yogur con almendras</p>
+                                            <p class="text-xs text-text-secondary">180 kcal</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dinner -->
+                                <div class="bg-surface rounded-lg p-3 border border-border-light">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="text-sm font-medium text-text-primary">Cena</h5>
+                                        <input type="checkbox" checked class="text-primary focus:ring-primary rounded">
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1730863761922-a876066fbf7e" 
+                                            alt="Salmón a la plancha con verduras al vapor y quinoa como cena equilibrada"
+                                            class="w-8 h-8 rounded object-cover"
+                                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                        >
+                                        <div>
+                                            <p class="text-xs font-medium">Salmón con quinoa</p>
+                                            <p class="text-xs text-text-secondary">380 kcal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3 flex items-center justify-between text-sm">
+                                <span class="text-text-secondary">Total diario: 1.330 kcal</span>
+                                <button class="text-primary hover:text-primary-700 font-medium">
+                                    <i class="fas fa-comment mr-1"></i>Añadir comentario
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tomorrow's Preview -->
+                        <div class="bg-surface rounded-lg p-4 border border-border-light">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-medium text-text-primary">Mañana - Miércoles 13 Nov</h4>
+                                <span class="text-sm text-text-secondary">Plan preparado</span>
+                            </div>
+                            <div class="flex items-center space-x-4 text-sm text-text-secondary">
+                                <span><i class="fas fa-utensils mr-1"></i>4 comidas</span>
+                                <span><i class="fas fa-fire mr-1"></i>1.280 kcal</span>
+                                <span><i class="fas fa-leaf mr-1"></i>Mediterránea</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Next Appointment -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">
+                        <i class="fas fa-calendar-alt text-primary mr-2"></i>
+                        Próxima Cita
+                    </h3>
+                    <div class="bg-primary-50 rounded-lg p-4 border border-primary-100">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <img 
+                                src="https://images.unsplash.com/photo-1675270714610-11a5cadcc7b3" 
+                                alt="Dra. Carmen Rodríguez, nutricionista profesional sonriendo en consulta"
+                                class="w-12 h-12 rounded-full object-cover"
+                                onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                            >
+                            <div>
+                                <p class="font-medium text-text-primary">Dra. Carmen Rodríguez</p>
+                                <p class="text-sm text-text-secondary">Nutricionista Clínica</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-text-primary">
+                                <i class="fas fa-calendar text-primary mr-2 w-4"></i>
+                                <span>Jueves, 14 Nov 2025</span>
+                            </div>
+                            <div class="flex items-center text-text-primary">
+                                <i class="fas fa-clock text-primary mr-2 w-4"></i>
+                                <span>10:30 - 11:15</span>
+                            </div>
+                            <div class="flex items-center text-text-primary">
+                                <i class="fas fa-map-marker-alt text-primary mr-2 w-4"></i>
+                                <span>Consulta presencial</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            <button class="btn-primary w-full text-sm">
+                                <i class="fas fa-video mr-2"></i>Unirse a videollamada
+                            </button>
+                            <button class="w-full text-sm text-text-secondary hover:text-primary transition-colors">
+                                <i class="fas fa-edit mr-2"></i>Reprogramar cita
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Communication Panel -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">
+                        <i class="fas fa-comments text-secondary mr-2"></i>
+                        Comunicación
+                    </h3>
+                    
+                    <!-- Recent Messages -->
+                    <div class="space-y-3 mb-4">
+                        <div class="bg-primary-50 rounded-lg p-3">
+                            <div class="flex items-start space-x-2">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1675270347058-8066cd1fe523" 
+                                    alt="Dra. Carmen Rodríguez enviando mensaje de seguimiento nutricional"
+                                    class="w-6 h-6 rounded-full object-cover"
+                                    onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                >
+                                <div class="flex-1">
+                                    <p class="text-xs text-text-secondary mb-1">Dra. Carmen - Hace 2 horas</p>
+                                    <p class="text-sm text-text-primary">¡Excelente progreso esta semana! Sigue así con el plan nutricional.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-surface rounded-lg p-3 border border-border-light ml-6">
+                            <div class="flex items-start space-x-2">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1675270826311-37e832422125" 
+                                    alt="María López respondiendo mensaje a su nutricionista"
+                                    class="w-6 h-6 rounded-full object-cover"
+                                    onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                                >
+                                <div class="flex-1">
+                                    <p class="text-xs text-text-secondary mb-1">Tú - Hace 1 hora</p>
+                                    <p class="text-sm text-text-primary">¡Gracias! Me siento mucho mejor. ¿Puedo añadir más proteína en la cena?</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Message Input -->
+                    <div class="border-t border-border-light pt-4">
+                        <div class="flex space-x-2">
+                            <input 
+                                type="text" 
+                                placeholder="Escribe tu mensaje..." 
+                                class="input-field flex-1 text-sm"
+                            >
+                            <button class="btn-primary px-3 py-2">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between mt-2 text-xs text-text-secondary">
+                            <button class="hover:text-primary transition-colors">
+                                <i class="fas fa-paperclip mr-1"></i>Adjuntar archivo
+                            </button>
+                            <span>Respuesta típica en 2-4 horas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Milestones -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">
+                        <i class="fas fa-trophy text-warning mr-2"></i>
+                        Logros Recientes
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 p-3 bg-success-50 rounded-lg border border-success-100">
+                            <div class="w-8 h-8 bg-success rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-text-primary">Meta de peso mensual</p>
+                                <p class="text-xs text-text-secondary">Perdiste 3,2 kg este mes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 p-3 bg-primary-50 rounded-lg border border-primary-100">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-utensils text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-text-primary">Adherencia al plan</p>
+                                <p class="text-xs text-text-secondary">85% de seguimiento semanal</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg border border-secondary-100">
+                            <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
+                                <i class="fas fa-heart text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-text-primary">Hábitos saludables</p>
+                                <p class="text-xs text-text-secondary">15 días consecutivos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Educational Resources -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-text-primary mb-4">
+                        <i class="fas fa-lightbulb text-accent mr-2"></i>
+                        Consejos Nutricionales
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="p-3 bg-accent-50 rounded-lg border border-accent-100">
+                            <h4 class="text-sm font-medium text-text-primary mb-1">Hidratación</h4>
+                            <p class="text-xs text-text-secondary">Bebe al menos 2 litros de agua al día para optimizar tu metabolismo.</p>
+                        </div>
+                        
+                        <div class="p-3 bg-warning-50 rounded-lg border border-warning-100">
+                            <h4 class="text-sm font-medium text-text-primary mb-1">Ejercicio</h4>
+                            <p class="text-xs text-text-secondary">30 minutos de caminata después de las comidas mejora la digestión.</p>
+                        </div>
+                        
+                        <div class="p-3 bg-secondary-50 rounded-lg border border-secondary-100">
+                            <h4 class="text-sm font-medium text-text-primary mb-1">Descanso</h4>
+                            <p class="text-xs text-text-secondary">Dormir 7-8 horas ayuda a regular las hormonas del hambre.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Navigation -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border-light">
+        <div class="grid grid-cols-4 gap-1">
+            <a href="patient_portal.html" class="flex flex-col items-center py-2 text-primary">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-xs mt-1">Inicio</span>
+            </a>
+            <a href="javascript:void(0)" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-xs mt-1">Progreso</span>
+            </a>
+            <a href="javascript:void(0)" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-utensils text-lg"></i>
+                <span class="text-xs mt-1">Comidas</span>
+            </a>
+            <a href="javascript:void(0)" class="flex flex-col items-center py-2 text-text-secondary">
+                <i class="fas fa-comments text-lg"></i>
+                <span class="text-xs mt-1">Chat</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Weight Progress Chart
+        const weightCtx = document.getElementById('weightChart').getContext('2d');
+        new Chart(weightCtx, {
+            type: 'line',
+            data: {
+                labels: ['15 Oct', '22 Oct', '29 Oct', '05 Nov', '12 Nov'],
+                datasets: [{
+                    label: 'Peso (kg)',
+                    data: [71.0, 70.2, 69.5, 68.8, 67.8],
+                    borderColor: '#2563EB',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Objetivo (kg)',
+                    data: [65.0, 65.0, 65.0, 65.0, 65.0],
+                    borderColor: '#059669',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 64,
+                        max: 72,
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' kg';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // BMI Chart
+        const bmiCtx = document.getElementById('bmiChart').getContext('2d');
+        new Chart(bmiCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['IMC Actual', 'Hacia Objetivo'],
+                datasets: [{
+                    data: [24.1, 1.0],
+                    backgroundColor: ['#2563EB', '#E5E7EB'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Notification handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate real-time notifications
+            setTimeout(() => {
+                showNotification('Nuevo mensaje de tu nutricionista', 'success');
+            }, 5000);
+        });
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-success text-white' : 
+                type === 'error' ? 'bg-error text-white' : 
+                'bg-primary text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation' : 'info'}-circle"></i>
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Progress photo upload simulation
+        function uploadProgressPhoto() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                if (e.target.files.length > 0) {
+                    showNotification('Foto de progreso subida correctamente', 'success');
+                }
+            };
+            input.click();
+        }
+
+        // Meal completion tracking
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    showNotification('Comida marcada como completada', 'success');
+                }
+            });
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

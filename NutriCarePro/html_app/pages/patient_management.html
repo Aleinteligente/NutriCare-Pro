@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pacientes - NutriCare Pro</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fnutricare6325back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Header -->
+    <header class="bg-surface shadow-clinical border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Navigation -->
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center">
+                        <div class="bg-primary rounded-full p-2 mr-3">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold text-text-primary">NutriCare Pro</h1>
+                    </div>
+                    
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="nutritionist_dashboard.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="patient_management.html" class="text-primary font-medium">
+                            <i class="fas fa-users mr-2"></i>Pacientes
+                        </a>
+                        <a href="appointment_scheduling.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-calendar-alt mr-2"></i>Citas
+                        </a>
+                        <a href="meal_plan_editor.html" class="text-text-secondary hover:text-primary transition-colors">
+                            <i class="fas fa-utensils mr-2"></i>Planes Nutricionales
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                        <i class="fas fa-bell"></i>
+                        <span class="sr-only">Notificaciones</span>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <img 
+                            src="https://images.unsplash.com/photo-1659354206036-3d2699c31e0c" 
+                            alt="Foto de perfil de la nutricionista Dra. Marisol Morales"
+                            class="w-8 h-8 rounded-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;"
+                        >
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-medium text-text-primary">Dra. Marisol Morales</p>
+                            <p class="text-xs text-text-secondary">Nutricionista</p>
+                        </div>
+                    </div>
+                    <button onclick="logout()" class="p-2 text-text-secondary hover:text-accent transition-colors touch-target">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="sr-only">Cerrar sesión</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Patient List Section -->
+            <div class="flex-1">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-text-primary mb-2">Gestión de Pacientes</h2>
+                    <p class="text-text-secondary">Administra los registros clínicos y coordina la atención de tus pacientes</p>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="card mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                        <!-- Search Bar -->
+                        <div class="flex-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-text-secondary"></i>
+                            </div>
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                class="input-field pl-10" 
+                                placeholder="Buscar pacientes por nombre, email o teléfono..."
+                                onkeyup="filterPatients()"
+                            >
+                        </div>
+                        
+                        <!-- Add Patient Button -->
+                        <button onclick="openAddPatientModal()" class="btn-primary whitespace-nowrap touch-target">
+                            <i class="fas fa-plus mr-2"></i>Nuevo Paciente
+                        </button>
+                    </div>
+
+                    <!-- Advanced Filters -->
+                    <div class="flex flex-wrap gap-4">
+                        <select id="statusFilter" class="input-field w-auto" onchange="filterPatients()">
+                            <option value="">Todos los estados</option>
+                            <option value="active">Activo</option>
+                            <option value="inactive">Inactivo</option>
+                            <option value="pending">Pendiente</option>
+                        </select>
+                        
+                        <select id="progressFilter" class="input-field w-auto" onchange="filterPatients()">
+                            <option value="">Todo el progreso</option>
+                            <option value="excellent">Excelente</option>
+                            <option value="good">Bueno</option>
+                            <option value="fair">Regular</option>
+                            <option value="poor">Necesita atención</option>
+                        </select>
+                        
+                        <input 
+                            type="date" 
+                            id="dateFromFilter" 
+                            class="input-field w-auto" 
+                            onchange="filterPatients()"
+                            title="Desde fecha"
+                        >
+                        
+                        <input 
+                            type="date" 
+                            id="dateToFilter" 
+                            class="input-field w-auto" 
+                            onchange="filterPatients()"
+                            title="Hasta fecha"
+                        >
+                        
+                        <button onclick="resetFilters()" class="px-4 py-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                            <i class="fas fa-times mr-2"></i>Limpiar filtros
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Patient Table -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-border-light">
+                            <thead class="bg-background">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        Paciente
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        Última Visita
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        IMC
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        Progreso
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        Estado
+                                    </th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider">
+                                        Acciones
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientTableBody" class="bg-surface divide-y divide-border-light">
+                                <!-- Patient rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex items-center justify-between mt-6">
+                    <div class="text-sm text-text-secondary">
+                        Mostrando <span id="showingFrom">1</span> a <span id="showingTo">10</span> de <span id="totalPatients">25</span> pacientes
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="prevPage" onclick="changePage(-1)" class="px-3 py-2 text-sm text-text-secondary hover:text-primary transition-colors touch-target">
+                            <i class="fas fa-chevron-left mr-1"></i>Anterior
+                        </button>
+                        <button id="nextPage" onclick="changePage(1)" class="px-3 py-2 text-sm text-text-secondary hover:text-primary transition-colors touch-target">
+                            Siguiente<i class="fas fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Detail Panel -->
+            <div class="lg:w-96">
+                <div id="patientDetailPanel" class="card sticky top-8">
+                    <div id="noPatientSelected" class="text-center py-12">
+                        <i class="fas fa-user-circle text-6xl text-text-secondary mb-4"></i>
+                        <h3 class="text-lg font-medium text-text-primary mb-2">Selecciona un paciente</h3>
+                        <p class="text-text-secondary">Haz clic en un paciente de la lista para ver sus detalles clínicos</p>
+                    </div>
+
+                    <div id="patientDetails" class="hidden">
+                        <!-- Patient Header -->
+                        <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-border-light">
+                            <img 
+                                id="patientPhoto" 
+                                src="" 
+                                alt="Foto del paciente seleccionado"
+                                class="w-16 h-16 rounded-full object-cover"
+                            >
+                            <div class="flex-1">
+                                <h3 id="patientName" class="text-lg font-semibold text-text-primary"></h3>
+                                <p id="patientEmail" class="text-sm text-text-secondary"></p>
+                                <p id="patientPhone" class="text-sm text-text-secondary"></p>
+                            </div>
+                            <button onclick="editPatient()" class="p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+
+                        <!-- Clinical Measurements -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-text-primary mb-3">Mediciones Clínicas</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-background p-3 rounded-lg">
+                                    <p class="text-xs text-text-secondary">Peso</p>
+                                    <p id="patientWeight" class="text-lg font-semibold text-text-primary"></p>
+                                </div>
+                                <div class="bg-background p-3 rounded-lg">
+                                    <p class="text-xs text-text-secondary">Altura</p>
+                                    <p id="patientHeight" class="text-lg font-semibold text-text-primary"></p>
+                                </div>
+                                <div class="bg-background p-3 rounded-lg">
+                                    <p class="text-xs text-text-secondary">IMC</p>
+                                    <p id="patientBMI" class="text-lg font-semibold text-text-primary"></p>
+                                </div>
+                                <div class="bg-background p-3 rounded-lg">
+                                    <p class="text-xs text-text-secondary">% Grasa</p>
+                                    <p id="patientBodyFat" class="text-lg font-semibold text-text-primary"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Chart -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-text-primary mb-3">Evolución del Peso</h4>
+                            <div class="bg-background p-4 rounded-lg">
+                                <canvas id="weightChart" width="300" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Recent Appointments -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-medium text-text-primary mb-3">Citas Recientes</h4>
+                            <div id="recentAppointments" class="space-y-2">
+                                <!-- Appointments will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="space-y-2">
+                            <button onclick="scheduleAppointment()" class="w-full btn-primary text-sm touch-target">
+                                <i class="fas fa-calendar-plus mr-2"></i>Programar Cita
+                            </button>
+                            <button onclick="assignMealPlan()" class="w-full btn-secondary text-sm touch-target">
+                                <i class="fas fa-utensils mr-2"></i>Asignar Plan Nutricional
+                            </button>
+                            <button onclick="openChat()" class="w-full px-4 py-2 border border-border-medium text-text-primary rounded-lg hover:bg-background transition-colors text-sm touch-target">
+                                <i class="fas fa-comments mr-2"></i>Enviar Mensaje
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Patient Modal -->
+    <div id="addPatientModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-surface rounded-lg shadow-clinical max-w-md w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold text-text-primary">Nuevo Paciente</h3>
+                    <button onclick="closeAddPatientModal()" class="p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="addPatientForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Nombre</label>
+                            <input type="text" id="firstName" class="input-field" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Apellidos</label>
+                            <input type="text" id="lastName" class="input-field" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Email</label>
+                        <input type="email" id="email" class="input-field" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Teléfono</label>
+                        <input type="tel" id="phone" class="input-field" required>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Peso (kg)</label>
+                            <input type="number" id="weight" class="input-field" step="0.1" min="0" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Altura (cm)</label>
+                            <input type="number" id="height" class="input-field" min="0" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">% Grasa</label>
+                            <input type="number" id="bodyFat" class="input-field" step="0.1" min="0" max="100">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Fecha de Nacimiento</label>
+                        <input type="date" id="birthDate" class="input-field" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Notas Clínicas</label>
+                        <textarea id="clinicalNotes" class="input-field" rows="3" placeholder="Alergias, condiciones médicas, objetivos..."></textarea>
+                    </div>
+
+                    <div class="flex space-x-3 pt-4">
+                        <button type="submit" class="flex-1 btn-primary touch-target">
+                            <i class="fas fa-save mr-2"></i>Guardar Paciente
+                        </button>
+                        <button type="button" onclick="closeAddPatientModal()" class="px-4 py-2 border border-border-medium text-text-primary rounded-lg hover:bg-background transition-colors touch-target">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <div id="fileUploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-surface rounded-lg shadow-clinical max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold text-text-primary">Subir Documento</h3>
+                    <button onclick="closeFileUploadModal()" class="p-2 text-text-secondary hover:text-primary transition-colors touch-target">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="border-2 border-dashed border-border-medium rounded-lg p-8 text-center">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-text-secondary mb-4"></i>
+                    <p class="text-text-primary mb-2">Arrastra archivos aquí o haz clic para seleccionar</p>
+                    <p class="text-sm text-text-secondary mb-4">PDF, DOC, JPG hasta 10MB</p>
+                    <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                    <button onclick="document.getElementById('fileInput').click()" class="btn-primary touch-target">
+                        Seleccionar Archivos
+                    </button>
+                </div>
+
+                <div id="uploadProgress" class="mt-4 hidden">
+                    <div class="bg-background rounded-full h-2">
+                        <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p class="text-sm text-text-secondary mt-2">Subiendo archivo...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock patient data
+        let patients = [
+            {
+                id: 1,
+                firstName: "Ana",
+                lastName: "García Martínez",
+                email: "ana.garcia@email.com",
+                phone: "+34 612 345 678",
+                weight: 68.5,
+                height: 165,
+                bodyFat: 22.3,
+                birthDate: "1985-03-15",
+                lastVisit: "2025-11-10",
+                status: "active",
+                progress: "excellent",
+                clinicalNotes: "Objetivo: perder 5kg. Alergia a frutos secos.",
+                photo: "https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                weightHistory: [
+                    { date: "2025-09-01", weight: 73.2 },
+                    { date: "2025-09-15", weight: 72.1 },
+                    { date: "2025-10-01", weight: 70.8 },
+                    { date: "2025-10-15", weight: 69.5 },
+                    { date: "2025-11-01", weight: 68.9 },
+                    { date: "2025-11-10", weight: 68.5 }
+                ],
+                appointments: [
+                    { date: "2025-11-10", time: "10:00", status: "completed", type: "Seguimiento" },
+                    { date: "2025-10-27", time: "11:30", status: "completed", type: "Control mensual" }
+                ]
+            },
+            {
+                id: 2,
+                firstName: "Carlos",
+                lastName: "Rodríguez López",
+                email: "carlos.rodriguez@email.com",
+                phone: "+34 623 456 789",
+                weight: 85.2,
+                height: 178,
+                bodyFat: 18.7,
+                birthDate: "1990-07-22",
+                lastVisit: "2025-11-08",
+                status: "active",
+                progress: "good",
+                clinicalNotes: "Deportista. Objetivo: ganar masa muscular.",
+                photo: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                weightHistory: [
+                    { date: "2025-09-01", weight: 82.1 },
+                    { date: "2025-09-15", weight: 82.8 },
+                    { date: "2025-10-01", weight: 83.5 },
+                    { date: "2025-10-15", weight: 84.2 },
+                    { date: "2025-11-01", weight: 84.8 },
+                    { date: "2025-11-08", weight: 85.2 }
+                ],
+                appointments: [
+                    { date: "2025-11-08", time: "16:00", status: "completed", type: "Evaluación nutricional" },
+                    { date: "2025-10-25", time: "15:30", status: "completed", type: "Seguimiento deportivo" }
+                ]
+            },
+            {
+                id: 3,
+                firstName: "María",
+                lastName: "Fernández Silva",
+                email: "maria.fernandez@email.com",
+                phone: "+34 634 567 890",
+                weight: 72.8,
+                height: 160,
+                bodyFat: 28.5,
+                birthDate: "1978-12-03",
+                lastVisit: "2025-11-05",
+                status: "active",
+                progress: "fair",
+                clinicalNotes: "Diabetes tipo 2. Dieta baja en carbohidratos.",
+                photo: "https://cdn.pixabay.com/photo/2017/03/14/03/20/woman-2141808_1280.jpg",
+                weightHistory: [
+                    { date: "2025-09-01", weight: 75.2 },
+                    { date: "2025-09-15", weight: 74.8 },
+                    { date: "2025-10-01", weight: 74.1 },
+                    { date: "2025-10-15", weight: 73.5 },
+                    { date: "2025-11-01", weight: 73.1 },
+                    { date: "2025-11-05", weight: 72.8 }
+                ],
+                appointments: [
+                    { date: "2025-11-05", time: "09:30", status: "completed", type: "Control diabético" },
+                    { date: "2025-10-22", time: "10:00", status: "completed", type: "Seguimiento" }
+                ]
+            },
+            {
+                id: 4,
+                firstName: "David",
+                lastName: "Martín Ruiz",
+                email: "david.martin@email.com",
+                phone: "+34 645 678 901",
+                weight: 95.5,
+                height: 185,
+                bodyFat: 25.2,
+                birthDate: "1982-05-18",
+                lastVisit: "2025-10-30",
+                status: "inactive",
+                progress: "poor",
+                clinicalNotes: "Obesidad grado I. Necesita seguimiento intensivo.",
+                photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                weightHistory: [
+                    { date: "2025-08-01", weight: 98.2 },
+                    { date: "2025-08-15", weight: 97.8 },
+                    { date: "2025-09-01", weight: 97.1 },
+                    { date: "2025-09-15", weight: 96.5 },
+                    { date: "2025-10-01", weight: 96.0 },
+                    { date: "2025-10-30", weight: 95.5 }
+                ],
+                appointments: [
+                    { date: "2025-10-30", time: "12:00", status: "completed", type: "Evaluación inicial" },
+                    { date: "2025-10-16", time: "11:00", status: "no-show", type: "Seguimiento" }
+                ]
+            },
+            {
+                id: 5,
+                firstName: "Laura",
+                lastName: "Sánchez Moreno",
+                email: "laura.sanchez@email.com",
+                phone: "+34 656 789 012",
+                weight: 58.3,
+                height: 155,
+                bodyFat: 20.1,
+                birthDate: "1995-09-12",
+                lastVisit: "2025-11-12",
+                status: "active",
+                progress: "excellent",
+                clinicalNotes: "Vegetariana. Objetivo: mantener peso saludable.",
+                photo: "https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                weightHistory: [
+                    { date: "2025-09-01", weight: 59.8 },
+                    { date: "2025-09-15", weight: 59.2 },
+                    { date: "2025-10-01", weight: 58.9 },
+                    { date: "2025-10-15", weight: 58.6 },
+                    { date: "2025-11-01", weight: 58.4 },
+                    { date: "2025-11-12", weight: 58.3 }
+                ],
+                appointments: [
+                    { date: "2025-11-12", time: "14:30", status: "completed", type: "Control rutinario" },
+                    { date: "2025-10-29", time: "13:00", status: "completed", type: "Seguimiento vegetariano" }
+                ]
+            }
+        ];
+
+        let filteredPatients = [...patients];
+        let currentPage = 1;
+        const patientsPerPage = 10;
+        let selectedPatient = null;
+        let weightChart = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPatientTable();
+            updatePagination();
+        });
+
+        // Filter patients
+        function filterPatients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const progressFilter = document.getElementById('progressFilter').value;
+            const dateFrom = document.getElementById('dateFromFilter').value;
+            const dateTo = document.getElementById('dateToFilter').value;
+
+            filteredPatients = patients.filter(patient => {
+                const matchesSearch = patient.firstName.toLowerCase().includes(searchTerm) ||
+                                    patient.lastName.toLowerCase().includes(searchTerm) ||
+                                    patient.email.toLowerCase().includes(searchTerm) ||
+                                    patient.phone.includes(searchTerm);
+                
+                const matchesStatus = !statusFilter || patient.status === statusFilter;
+                const matchesProgress = !progressFilter || patient.progress === progressFilter;
+                
+                let matchesDateRange = true;
+                if (dateFrom || dateTo) {
+                    const lastVisitDate = new Date(patient.lastVisit);
+                    if (dateFrom) matchesDateRange = matchesDateRange && lastVisitDate >= new Date(dateFrom);
+                    if (dateTo) matchesDateRange = matchesDateRange && lastVisitDate <= new Date(dateTo);
+                }
+
+                return matchesSearch && matchesStatus && matchesProgress && matchesDateRange;
+            });
+
+            currentPage = 1;
+            renderPatientTable();
+            updatePagination();
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('progressFilter').value = '';
+            document.getElementById('dateFromFilter').value = '';
+            document.getElementById('dateToFilter').value = '';
+            filteredPatients = [...patients];
+            currentPage = 1;
+            renderPatientTable();
+            updatePagination();
+        }
+
+        // Render patient table
+        function renderPatientTable() {
+            const tbody = document.getElementById('patientTableBody');
+            const startIndex = (currentPage - 1) * patientsPerPage;
+            const endIndex = startIndex + patientsPerPage;
+            const patientsToShow = filteredPatients.slice(startIndex, endIndex);
+
+            tbody.innerHTML = patientsToShow.map(patient => {
+                const bmi = calculateBMI(patient.weight, patient.height);
+                const bmiStatus = getBMIStatus(bmi);
+                const progressBadge = getProgressBadge(patient.progress);
+                const statusBadge = getStatusBadge(patient.status);
+
+                return `
+                    <tr class="hover:bg-background transition-colors cursor-pointer" onclick="selectPatient(${patient.id})">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img class="h-10 w-10 rounded-full object-cover" 
+                                     src="${patient.photo}" 
+                                     alt="Foto de ${patient.firstName} ${patient.lastName}"
+                                     onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;">
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-text-primary">${patient.firstName} ${patient.lastName}</div>
+                                    <div class="text-sm text-text-secondary">${patient.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
+                            ${formatDate(patient.lastVisit)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-text-primary font-data">${bmi.toFixed(1)}</div>
+                            <div class="text-xs ${bmiStatus.color}">${bmiStatus.label}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            ${progressBadge}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            ${statusBadge}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button onclick="event.stopPropagation(); editPatient(${patient.id})" 
+                                        class="text-primary hover:text-primary-700 transition-colors touch-target">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); scheduleAppointment(${patient.id})" 
+                                        class="text-secondary hover:text-secondary-700 transition-colors touch-target">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); uploadFile(${patient.id})" 
+                                        class="text-text-secondary hover:text-primary transition-colors touch-target">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Select patient
+        function selectPatient(patientId) {
+            selectedPatient = patients.find(p => p.id === patientId);
+            if (selectedPatient) {
+                showPatientDetails(selectedPatient);
+            }
+        }
+
+        // Show patient details
+        function showPatientDetails(patient) {
+            document.getElementById('noPatientSelected').classList.add('hidden');
+            document.getElementById('patientDetails').classList.remove('hidden');
+
+            // Update patient info
+            document.getElementById('patientPhoto').src = patient.photo;
+            document.getElementById('patientPhoto').alt = `Foto de ${patient.firstName} ${patient.lastName}`;
+            document.getElementById('patientName').textContent = `${patient.firstName} ${patient.lastName}`;
+            document.getElementById('patientEmail').textContent = patient.email;
+            document.getElementById('patientPhone').textContent = patient.phone;
+
+            // Update measurements
+            document.getElementById('patientWeight').textContent = `${patient.weight.toFixed(1)} kg`;
+            document.getElementById('patientHeight').textContent = `${patient.height} cm`;
+            document.getElementById('patientBMI').textContent = calculateBMI(patient.weight, patient.height).toFixed(1);
+            document.getElementById('patientBodyFat').textContent = `${patient.bodyFat.toFixed(1)}%`;
+
+            // Update recent appointments
+            const appointmentsHtml = patient.appointments.map(apt => `
+                <div class="flex items-center justify-between p-2 bg-background rounded">
+                    <div>
+                        <p class="text-sm font-medium text-text-primary">${apt.type}</p>
+                        <p class="text-xs text-text-secondary">${formatDate(apt.date)} - ${apt.time}</p>
+                    </div>
+                    <span class="text-xs ${apt.status === 'completed' ? 'text-success' : apt.status === 'no-show' ? 'text-error' : 'text-warning'}">
+                        ${apt.status === 'completed' ? 'Completada' : apt.status === 'no-show' ? 'No asistió' : 'Programada'}
+                    </span>
+                </div>
+            `).join('');
+            document.getElementById('recentAppointments').innerHTML = appointmentsHtml;
+
+            // Update weight chart
+            updateWeightChart(patient.weightHistory);
+        }
+
+        // Update weight chart
+        function updateWeightChart(weightHistory) {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            
+            if (weightChart) {
+                weightChart.destroy();
+            }
+
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: weightHistory.map(entry => formatDate(entry.date)),
+                    datasets: [{
+                        label: 'Peso (kg)',
+                        data: weightHistory.map(entry => entry.weight),
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: '#E5E7EB'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#E5E7EB'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Utility functions
+        function calculateBMI(weight, height) {
+            return weight / Math.pow(height / 100, 2);
+        }
+
+        function getBMIStatus(bmi) {
+            if (bmi < 18.5) return { label: 'Bajo peso', color: 'text-warning' };
+            if (bmi < 25) return { label: 'Normal', color: 'text-success' };
+            if (bmi < 30) return { label: 'Sobrepeso', color: 'text-warning' };
+            return { label: 'Obesidad', color: 'text-error' };
+        }
+
+        function getProgressBadge(progress) {
+            const badges = {
+                excellent: '<span class="status-success">Excelente</span>',
+                good: '<span class="bg-secondary-50 text-secondary-700 border border-secondary-100 px-3 py-1 rounded-full text-sm font-medium">Bueno</span>',
+                fair: '<span class="status-warning">Regular</span>',
+                poor: '<span class="status-error">Necesita atención</span>'
+            };
+            return badges[progress] || badges.fair;
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                active: '<span class="status-success">Activo</span>',
+                inactive: '<span class="status-error">Inactivo</span>',
+                pending: '<span class="status-warning">Pendiente</span>'
+            };
+            return badges[status] || badges.pending;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Pagination
+        function updatePagination() {
+            const totalPatients = filteredPatients.length;
+            const startIndex = (currentPage - 1) * patientsPerPage;
+            const endIndex = Math.min(startIndex + patientsPerPage, totalPatients);
+
+            document.getElementById('showingFrom').textContent = totalPatients > 0 ? startIndex + 1 : 0;
+            document.getElementById('showingTo').textContent = endIndex;
+            document.getElementById('totalPatients').textContent = totalPatients;
+
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = endIndex >= totalPatients;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderPatientTable();
+                updatePagination();
+            }
+        }
+
+        // Modal functions
+        function openAddPatientModal() {
+            document.getElementById('addPatientModal').classList.remove('hidden');
+        }
+
+        function closeAddPatientModal() {
+            document.getElementById('addPatientModal').classList.add('hidden');
+            document.getElementById('addPatientForm').reset();
+        }
+
+        function openFileUploadModal() {
+            document.getElementById('fileUploadModal').classList.remove('hidden');
+        }
+
+        function closeFileUploadModal() {
+            document.getElementById('fileUploadModal').classList.add('hidden');
+        }
+
+        // Form submission
+        document.getElementById('addPatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const newPatient = {
+                id: patients.length + 1,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                weight: parseFloat(document.getElementById('weight').value),
+                height: parseInt(document.getElementById('height').value),
+                bodyFat: parseFloat(document.getElementById('bodyFat').value) || 0,
+                birthDate: document.getElementById('birthDate').value,
+                lastVisit: new Date().toISOString().split('T')[0],
+                status: 'active',
+                progress: 'fair',
+                clinicalNotes: document.getElementById('clinicalNotes').value,
+                photo: 'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                weightHistory: [
+                    { date: new Date().toISOString().split('T')[0], weight: parseFloat(document.getElementById('weight').value) }
+                ],
+                appointments: []
+            };
+
+            patients.push(newPatient);
+            filteredPatients = [...patients];
+            renderPatientTable();
+            updatePagination();
+            closeAddPatientModal();
+            
+            // Show success message
+            alert('Paciente agregado exitosamente');
+        });
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                simulateFileUpload();
+            }
+        });
+
+        function simulateFileUpload() {
+            const progressBar = document.getElementById('progressBar');
+            const uploadProgress = document.getElementById('uploadProgress');
+            
+            uploadProgress.classList.remove('hidden');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        closeFileUploadModal();
+                        uploadProgress.classList.add('hidden');
+                        progressBar.style.width = '0%';
+                        alert('Archivo subido exitosamente');
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        // Action functions
+        function editPatient(patientId) {
+            if (patientId) {
+                const patient = patients.find(p => p.id === patientId);
+                if (patient) {
+                    alert(`Editando paciente: ${patient.firstName} ${patient.lastName}`);
+                }
+            } else if (selectedPatient) {
+                alert(`Editando paciente: ${selectedPatient.firstName} ${selectedPatient.lastName}`);
+            }
+        }
+
+        function scheduleAppointment(patientId) {
+            if (patientId) {
+                const patient = patients.find(p => p.id === patientId);
+                if (patient) {
+                    window.location.href = `appointment_scheduling.html?patient=${patient.id}`;
+                }
+            } else if (selectedPatient) {
+                window.location.href = `appointment_scheduling.html?patient=${selectedPatient.id}`;
+            } else {
+                window.location.href = 'appointment_scheduling.html';
+            }
+        }
+
+        function assignMealPlan() {
+            if (selectedPatient) {
+                window.location.href = `meal_plan_editor.html?patient=${selectedPatient.id}`;
+            } else {
+                window.location.href = 'meal_plan_editor.html';
+            }
+        }
+
+        function openChat() {
+            if (selectedPatient) {
+                alert(`Abriendo chat con ${selectedPatient.firstName} ${selectedPatient.lastName}`);
+            }
+        }
+
+        function uploadFile(patientId) {
+            const patient = patients.find(p => p.id === patientId);
+            if (patient) {
+                selectedPatient = patient;
+                openFileUploadModal();
+            }
+        }
+
+        function logout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            const addModal = document.getElementById('addPatientModal');
+            const fileModal = document.getElementById('fileUploadModal');
+            
+            if (e.target === addModal) {
+                closeAddPatientModal();
+            }
+            if (e.target === fileModal) {
+                closeFileUploadModal();
+            }
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

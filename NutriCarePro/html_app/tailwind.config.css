@@ -1,0 +1,165 @@
+module.exports = {
+  content: [
+    "./pages/*.{html,js}",
+    "./index.html",
+    "./src/**/*.{html,js,jsx,ts,tsx}",
+    "./components/**/*.{html,js,jsx,ts,tsx}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Primary Colors - Professional blue for medical trust
+        primary: {
+          DEFAULT: "#2563EB", // blue-600
+          50: "#EFF6FF", // blue-50
+          100: "#DBEAFE", // blue-100
+          500: "#3B82F6", // blue-500
+          600: "#2563EB", // blue-600
+          700: "#1D4ED8", // blue-700
+          900: "#1E3A8A", // blue-900
+        },
+        // Secondary Colors - Health-positive green
+        secondary: {
+          DEFAULT: "#059669", // emerald-600
+          50: "#ECFDF5", // emerald-50
+          100: "#D1FAE5", // emerald-100
+          500: "#10B981", // emerald-500
+          600: "#059669", // emerald-600
+          700: "#047857", // emerald-700
+        },
+        // Accent Colors - Alert red for critical states
+        accent: {
+          DEFAULT: "#DC2626", // red-600
+          50: "#FEF2F2", // red-50
+          100: "#FEE2E2", // red-100
+          500: "#EF4444", // red-500
+          600: "#DC2626", // red-600
+          700: "#B91C1C", // red-700
+        },
+        // Background and Surface
+        background: "#FAFBFC", // slate-50
+        surface: "#FFFFFF", // white
+        // Text Colors
+        text: {
+          primary: "#1F2937", // gray-800
+          secondary: "#6B7280", // gray-500
+        },
+        // Status Colors
+        success: {
+          DEFAULT: "#10B981", // emerald-500
+          50: "#ECFDF5", // emerald-50
+          100: "#D1FAE5", // emerald-100
+        },
+        warning: {
+          DEFAULT: "#F59E0B", // amber-500
+          50: "#FFFBEB", // amber-50
+          100: "#FEF3C7", // amber-100
+        },
+        error: {
+          DEFAULT: "#EF4444", // red-500
+          50: "#FEF2F2", // red-50
+          100: "#FEE2E2", // red-100
+        },
+        // Border Colors
+        border: {
+          light: "#E5E7EB", // gray-200
+          medium: "#D1D5DB", // gray-300
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        data: ['JetBrains Mono', 'monospace'],
+      },
+      fontSize: {
+        'xs': ['0.75rem', { lineHeight: '1rem' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+      },
+      boxShadow: {
+        'clinical-sm': '0 1px 3px rgba(0, 0, 0, 0.1)',
+        'clinical-md': '0 4px 6px rgba(0, 0, 0, 0.05)',
+        'clinical-lg': '0 10px 15px rgba(0, 0, 0, 0.1)',
+        'clinical': '0 1px 3px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.2s ease-in-out',
+        'slide-up': 'slideUp 0.3s ease-in-out',
+        'pulse-subtle': 'pulseSubtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'loading': 'loading 1.5s infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        pulseSubtle: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.8' },
+        },
+        loading: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+      },
+      transitionDuration: {
+        '200': '200ms',
+        '300': '300ms',
+      },
+      transitionTimingFunction: {
+        'clinical': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
+      },
+      minHeight: {
+        '44': '44px', // Minimum touch target size
+      },
+      minWidth: {
+        '44': '44px', // Minimum touch target size
+      },
+      borderRadius: {
+        'clinical': '0.5rem',
+      },
+      backdropBlur: {
+        'clinical': '8px',
+      },
+    },
+  },
+  plugins: [
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.touch-target': {
+          minHeight: '44px',
+          minWidth: '44px',
+        },
+        '.clinical-focus': {
+          '&:focus': {
+            outline: '2px solid #2563EB',
+            outlineOffset: '2px',
+          },
+        },
+        '.clinical-hover': {
+          transition: 'all 200ms ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1)',
+          },
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
+}
