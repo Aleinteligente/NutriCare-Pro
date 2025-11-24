@@ -549,6 +549,58 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateNotifications();
         });
+
+        // Hook de mensajería usando chatClient adapter
+        document.addEventListener('DOMContentLoaded', function() {
+            // inicializar chatClient en modo local
+            if (window.chatClient) {
+                chatClient.init({ transport: 'local', conversationId: 'default', authorId: 'DraMarisol' });
+                chatClient.connect();
+
+                const messageList = document.getElementById('message-list');
+                const input = document.getElementById('message-input');
+                const sendBtn = document.getElementById('send-button');
+
+                function appendMessageToDOM(msg){
+                    if (!messageList) return;
+                    const wrapper = document.createElement('div');
+                    wrapper.className = (msg.authorId === 'DraMarisol') ? 'message sent-by-me max-w-xs ml-auto' : 'message received max-w-xs';
+
+                    const bubble = document.createElement('p');
+                    bubble.className = (msg.authorId === 'DraMarisol') ? 'bg-blue-500 text-white p-2 rounded-lg break-words' : 'bg-gray-200 text-gray-800 p-2 rounded-lg break-words';
+                    bubble.textContent = msg.text;
+
+                    const ts = document.createElement('span');
+                    ts.className = 'timestamp text-xs text-gray-500 block mt-1' + (msg.authorId === 'DraMarisol' ? ' text-right' : '');
+                    const d = new Date(msg.timestamp);
+                    ts.textContent = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                    wrapper.appendChild(bubble);
+                    wrapper.appendChild(ts);
+                    messageList.appendChild(wrapper);
+                    messageList.scrollTop = messageList.scrollHeight;
+                }
+
+                // recibir mensajes del adapter
+                chatClient.on('message', (msg) => {
+                    appendMessageToDOM(msg);
+                });
+
+                // enviar
+                sendBtn.addEventListener('click', function(){
+                    const text = input.value.trim();
+                    if (!text) return;
+                    chatClient.sendMessage({ text });
+                    input.value = '';
+                    input.style.height = 'auto';
+                });
+
+                // Enter para enviar
+                input.addEventListener('keydown', function(e){
+                    if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendBtn.click(); }
+                });
+            }
+        });
     </script>
 <script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
