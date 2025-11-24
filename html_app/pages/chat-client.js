@@ -1,6 +1,7 @@
 // chat-client.js
 // Adapter de mensajería cliente-agnóstico.
 // Soporta transporte "local" (localStorage + BroadcastChannel) y placeholders para WebSocket.
+
 (function(global){
   const DEFAULT_CONV = 'default';
 
@@ -8,6 +9,7 @@
 
   function makeId(){ return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
 
+  // Local transport using localStorage + BroadcastChannel
   function createLocalTransport(conversationId){
     const storageKey = 'chat_messages_' + conversationId;
     const channelName = 'chat_channel_' + conversationId;
@@ -57,24 +59,70 @@
     return { connect, disconnect, send, onMessage };
   }
 
+  // Socket.IO transport
+  function createSocketIOTransport(conversationId, serverUrl, token){
+    if (typeof window.io === 'undefined') throw new Error('Socket.IO client not loaded');
+    const listeners = [];
+    let socket = null;
+
+    function connect(){
+      // pass token in auth for Socket.IO
+      socket = window.io(serverUrl || '/', { auth: { token }, autoConnect: false });
+      socket.on('connect', () => {
+        socket.emit('join', conversationId);
+      });
+
+      socket.on('history', (arr) => {
+        if (Array.isArray(arr)) arr.forEach(m => listeners.forEach(cb => cb(m)));
+      });
+
+      socket.on('message', (msg) => listeners.forEach(cb => cb(msg)));
+
+      socket.on('connect_error', (err) => {
+        console.warn('Socket connect_error', err && err.message);
+      });
+
+      socket.connect();
+    }
+
+    function disconnect(){ if (socket) { socket.disconnect(); socket = null; } }
+
+    function send(msg){ if (socket && socket.connected) socket.emit('message', msg); else console.warn('Socket not connected, message not sent'); }
+
+    function onMessage(cb){ listeners.push(cb); }
+
+    return { connect, disconnect, send, onMessage };
+  }
+
   // chatClient principal
   const chatClient = (function(){
     let transport = null;
-    let config = { transport: 'local', conversationId: DEFAULT_CONV, authorId: 'anonymous' };
+    let config = { transport: 'local', conversationId: DEFAULT_CONV, authorId: 'anonymous', serverUrl: null };
     const events = { message: [] };
 
     function emit(ev, payload){ if (events[ev]) events[ev].forEach(cb => cb(payload)); }
 
     function init(options = {}){
       config = Object.assign({}, config, options);
-      // create transport
-      if (config.transport === 'local'){
-        transport = createLocalTransport(config.conversationId);
-        transport.onMessage((msg) => emit('message', msg));
-      } else if (config.transport === 'ws'){
-        // placeholder: user will plug WS implementation later
-        console.warn('WS transport selected but not implemented in this adapter (placeholder)');
-      }
+      // choose transport: 'local' | 'socketio' | 'auto'
+      const pref = config.transport || 'auto';
+        if (pref === 'local'){
+          transport = createLocalTransport(config.conversationId);
+          transport.onMessage((msg) => emit('message', msg));
+        } else if (pref === 'socketio' || (pref === 'auto' && typeof window.io !== 'undefined')){
+          try{
+            transport = createSocketIOTransport(config.conversationId, config.serverUrl || undefined, config.token || null);
+            transport.onMessage((msg) => emit('message', msg));
+          }catch(err){
+            console.warn('socketio transport failed, falling back to local:', err.message);
+            transport = createLocalTransport(config.conversationId);
+            transport.onMessage((msg) => emit('message', msg));
+          }
+        } else {
+          // auto fallback to local
+          transport = createLocalTransport(config.conversationId);
+          transport.onMessage((msg) => emit('message', msg));
+        }
     }
 
     function connect(){ if (transport && transport.connect) transport.connect(); }
